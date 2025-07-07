@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchBar from '../components/SearchBar';
 import ProductGrid from '../components/ProductGrid';
 import Cart from '../components/Cart';
 import CheckoutPanel from '../components/CheckoutPanel';
 import '../styles/pos.css';
+import { fetchProducts, postSale } from '../services/api';
 
 const POS = () => {
-  const [products] = useState([
-    { id: 1, name: 'Tea', price: 1000 },
-    { id: 2, name: 'Coffee', price: 1500 },
-    { id: 3, name: 'Snack', price: 500 },
-  ]);
+  const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    fetchProducts().then(setProducts).catch(console.error);
+  }, []);
 
   const addToCart = (product) => {
     const existing = cart.find(item => item.id === product.id);
@@ -32,7 +33,7 @@ const POS = () => {
       </div>
       <div className="pos-right">
         <Cart cart={cart} setCart={setCart} />
-        <CheckoutPanel cart={cart} />
+        <CheckoutPanel cart={cart} setCart={setCart} />
       </div>
     </div>
   );

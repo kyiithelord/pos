@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import POS from './pages/POS';
+import Products from './pages/Products'; 
 import { syncPendingSales } from './utils/sync';
 
 function App() {
@@ -19,9 +21,16 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <POS />
-    </div>
+    <Router>
+      <nav style={{ padding: '1rem', background: '#eee' }}>
+        <Link to="/" style={{ marginRight: '1rem' }}>POS</Link>
+        <Link to="/products">Add Product</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<POS />} />
+        <Route path="/products" element={<Products />} />
+      </Routes>
+    </Router>
   );
 }
 

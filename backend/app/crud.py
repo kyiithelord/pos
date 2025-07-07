@@ -25,9 +25,14 @@ def create_sale(db: Session, sale: schemas.SaleCreate):
             price=item.price
         )
         db.add(db_item)
-        # Deduct stock
+        # Deduct stock safely
         product = db.query(models.Product).filter(models.Product.id == item.product_id).first()
-        product.stock -= item.quantity
+        if product:
+            if product.stock < item.quantity:
+                raise ValueError(f"Not enough stock for product ID {item.product_id}")
+            product.stock -= item.quantity
+        else:
+            raise ValueError(f"Product ID {item.product_id} not found")
 
     db.commit()
     return db_sale
