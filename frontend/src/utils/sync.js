@@ -1,20 +1,16 @@
-import axios from 'axios';
-import { getPendingSales, clearPendingSales } from './indexedDB';
-
-const API_BASE_URL = 'http://localhost:8000';
+// frontend/src/utils/sync.js
 
 export async function syncPendingSales() {
-  try {
-    const sales = await getPendingSales();
-    if (sales.length === 0) return;
+  // Simulate fetching unsynced sales from local storage or IndexedDB
+  console.log('🛰️ Syncing local sales to backend...');
 
-    // Send sales to backend one by one or in batch
-    for (const sale of sales) {
-      await axios.post(`${API_BASE_URL}/sales`, sale);
-    }
-    await clearPendingSales();
-    console.log('Synced pending sales to backend');
-  } catch (error) {
-    console.error('Failed to sync sales:', error);
-  }
+  // Simulated delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Simulate POST to backend
+  // Example:
+  // const sales = await getUnsyncedSalesFromIndexedDB();
+  // await axios.post('/api/sales/sync', sales);
+
+  console.log('✅ Sales sync simulated (replace with real logic)');
 }
