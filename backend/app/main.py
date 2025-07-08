@@ -17,8 +17,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(product.router)
-app.include_router(sale.router)
+
+app.include_router(product.router, prefix="/products", tags=["products"])
+app.include_router(sale.router, prefix="/sales", tags=["sales"])
+
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -35,6 +37,6 @@ def read_products(db: Session = Depends(get_db)):
 def add_product(product: schemas.ProductCreate, db: Session = Depends(get_db)):
     return crud.create_product(db, product)
 
-@app.post("/sales", response_model=schemas.Sale)
-def make_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
-    return crud.create_sale(db, sale)
+# @app.post("/sales", response_model=schemas.Sale)
+# def make_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
+#     return crud.create_sale(db, sale)

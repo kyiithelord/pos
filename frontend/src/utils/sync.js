@@ -1,16 +1,19 @@
-// frontend/src/utils/sync.js
+// utils/sync.js
+import { postSale } from '../services/api';
 
-export async function syncPendingSales() {
-  // Simulate fetching unsynced sales from local storage or IndexedDB
-  console.log('🛰️ Syncing local sales to backend...');
+export const syncPendingSales = async () => {
+  const pending = JSON.parse(localStorage.getItem('pending_sales') || '[]');
+  if (pending.length === 0) return;
 
-  // Simulated delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  for (const sale of pending) {
+    try {
+      await postSale(sale);
+    } catch (error) {
+      console.error('❌ Sync failed:', error);
+      throw error; // make App.jsx show "Failed to sync" if one fails
+    }
+  }
 
-  // Simulate POST to backend
-  // Example:
-  // const sales = await getUnsyncedSalesFromIndexedDB();
-  // await axios.post('/api/sales/sync', sales);
-
-  console.log('✅ Sales sync simulated (replace with real logic)');
-}
+  // Clear pending sales if all succeed
+  localStorage.removeItem('pending_sales');
+};

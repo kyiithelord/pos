@@ -1,26 +1,25 @@
 import React from 'react';
 import { postSale } from '../services/api';
 
-const CheckoutPanel = ({ cart, setCart }) => {
+const CheckoutPanel = ({ cart }) => {
   const total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
 
   const handlePay = async () => {
-    const saleData = {
+    const sale = {
+      total,
       items: cart.map(item => ({
         product_id: item.id,
         quantity: item.qty,
-        subtotal: item.qty * item.price
+        price: item.price,
       })),
-      total
     };
 
     try {
-      await postSale(saleData);
+      await postSale(sale);
       alert(`✅ Paid ${total} MMK`);
-      setCart([]);
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to sync. Save to IndexedDB instead (todo).");
+    } catch (error) {
+      console.error('❌ Sale failed:', error.response?.data || error.message);
+      alert('❌ Failed to sync. Sale not saved.');
     }
   };
 

@@ -15,6 +15,7 @@ class Sale(Base):
     id = Column(Integer, primary_key=True, index=True)
     date = Column(DateTime, default=datetime.utcnow)
     total = Column(Float)
+    items = relationship("SaleItem", backref="sale")
 
 class SaleItem(Base):
     __tablename__ = "sale_items"

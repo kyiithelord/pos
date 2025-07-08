@@ -8,12 +8,13 @@ export const fetchProducts = async () => {
 };
 
 export const postSale = async (sale) => {
+  // sale = { total: number, items: [{ product_id, quantity, price }] }
   const res = await axios.post(`${API_BASE}/sales`, sale);
   return res.data;
 };
 
 export const createProduct = async (product) => {
-  // product = { name: string, price: number, stock: number }
+  // product = { name, price, stock }
   const res = await axios.post(`${API_BASE}/products`, product);
   return res.data;
 };
